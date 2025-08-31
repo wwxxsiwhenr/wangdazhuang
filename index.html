@@ -47,6 +47,11 @@
     </style>
 </head>
 <body class="overflow-hidden bg-gradient-to-br from-dark to-gray-800 min-h-screen">
+    <!-- 背景音乐 -->
+    <audio id="bgm" autoplay loop>
+        <source src="https://sf5-hl-ali-cdn-tos.douyinstatic.com/obj/ies-music/7326462984321223463.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- 背景装饰元素 -->
     <div class="fixed inset-0 -z-10 opacity-10">
         <div class="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary blur-3xl"></div>
@@ -61,6 +66,10 @@
 
     <!-- 交互控制区 -->
     <div class="fixed bottom-4 right-4 z-50 flex gap-2">
+        <!-- 新增音乐控制按钮 -->
+        <button id="toggleMusicBtn" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2">
+            <i class="fa fa-volume-up"></i> 音乐
+        </button>
         <button id="changeColorBtn" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2">
             <i class="fa fa-paint-brush"></i> 换色
         </button>
@@ -76,7 +85,8 @@
             minSize: 12,
             maxSize: 72,
             density: 1.2, // 密度，数值越大名字越多
-            animate: true
+            animate: true,
+            music: true // 新增音乐状态配置
         };
 
         // 颜色方案
@@ -90,6 +100,7 @@
         
         let currentColorScheme = 0;
         const container = document.getElementById('nameContainer');
+        const bgm = document.getElementById('bgm'); // 获取音频元素
         
         // 生成名字并填充屏幕
         function populateNames() {
@@ -153,6 +164,13 @@
         // 初始化
         populateNames();
         
+        // 处理浏览器自动播放限制的兼容方案
+        document.addEventListener('click', () => {
+            if (config.music && bgm.paused) {
+                bgm.play().catch(e => console.log('自动播放被浏览器限制，点击页面后将播放音乐'));
+            }
+        }, { once: true });
+        
         // 窗口大小改变时重新生成
         window.addEventListener('resize', populateNames);
         
@@ -179,6 +197,20 @@
                 document.querySelectorAll('#nameContainer > div').forEach(el => {
                     el.classList.remove('animate-float');
                 });
+            }
+        });
+        
+        // 新增音乐控制按钮功能
+        document.getElementById('toggleMusicBtn').addEventListener('click', () => {
+            config.music = !config.music;
+            const icon = document.querySelector('#toggleMusicBtn i');
+            
+            if (config.music) {
+                icon.className = 'fa fa-volume-up';
+                bgm.play().catch(e => console.log('播放音乐失败'));
+            } else {
+                icon.className = 'fa fa-volume-off';
+                bgm.pause();
             }
         });
     </script>
