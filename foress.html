@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 梦幻卡通星球 🌈</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef, #a8edea, #fed6e3);
+            background-size: 400% 400%;
+            animation: rainbowBackground 8s ease infinite;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes rainbowBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            margin-bottom: 50px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+            margin: 50px 0;
+        }
+
+        .rotating-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            animation: rotate 4s linear infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .rotating-image:hover {
+            transform: rotate(0deg) scale(1.1);
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
+        }
+
+        .star-particle {
+            position: absolute;
+            font-size: 20px;
+            pointer-events: none;
+            animation: starShoot 1s ease-out forwards;
+        }
+
+        @keyframes starShoot {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .coupon-button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coupon-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .coupon-button:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .coupon-button.moved {
+            animation: moveAround 0.5s ease;
+        }
+
+        @keyframes moveAround {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(50px, -30px); }
+            50% { transform: translate(-30px, 50px); }
+            75% { transform: translate(30px, 30px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .floating-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            color: white;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .music-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .rotating-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .coupon-button {
+                font-size: 1.1rem;
+                padding: 15px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-stars" id="floatingStars"></div>
+    
+    <div class="controls">
+        <button class="control-btn" onclick="toggleRainbowMode()">🌈 彩虹模式</button>
+        <button class="control-btn" onclick="toggleFullscreen()">🖥️ 全屏</button>
+    </div>
+
+    <div class="music-controls">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🌟 嘉明的梦想 🌈</h1>
+        
+        <div class="image-container">
+            <img src="https://shitu-headportrait.cdn.bcebos.com/headportrait/1024332454,4146270570.jpg" 
+                 alt="嘉明的梦想" 
+                 class="rotating-image" 
+                 onclick="createStarBurst(event)">
+        </div>
+
+        <button class="coupon-button" id="couponButton" onclick="handleCouponClick()">
+            🎁 领取京东20元无门槛优惠券
+        </button>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="https://sf5-hl-ali-cdn-tos.douyinstatic.com/obj/ies-music/7532893037219875623.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let clickCount = 0;
+        let isMusicPlaying = false;
+        let isRainbowMode = false;
+
+        // 页面加载时自动播放音乐
+        window.addEventListener('load', function() {
+            const music = document.getElementById('backgroundMusic');
+            music.volume = 0.3;
+            
+            // 尝试自动播放
+            music.play().catch(() => {
+                // 如果自动播放失败，显示提示
+                showNotification('💡 点击页面任意位置开始播放音乐');
+            });
+        });
+
+        // 创建星星粒子爆炸效果
+        function createStarBurst(event) {
+            const imageContainer = document.querySelector('.image-container');
+            const rect = imageContainer.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const stars = ['⭐', '✨', '💫', '🌟', '⚡', '🌈', '🦄', '🎆', '🎇', '💖', '🌸', '🌺', '🦋', '🔥', '💥'];
+            const numStars = 25;
+
+            // 头像放大效果
+            const image = document.querySelector('.rotating-image');
+            image.style.transform = 'scale(1.3) rotate(720deg)';
+            image.style.boxShadow = '0 0 80px rgba(255, 255, 255, 1)';
+            
+            setTimeout(() => {
+                image.style.transform = 'scale(1) rotate(0deg)';
+                image.style.boxShadow = '0 0 30px rgba(255, 255, 255, 0.5)';
+            }, 800);
+
+            // 创建更大更明显的粒子
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.textContent = stars[Math.floor(Math.random() * stars.length)];
+                star.className = 'star-particle';
+                
+                const angle = (i * 360) / numStars + Math.random() * 30;
+                const distance = 150 + Math.random() * 100;
+                const x = Math.cos(angle * Math.PI / 180) * distance;
+                const y = Math.sin(angle * Math.PI / 180) * distance;
+                
+                star.style.setProperty('--x', x + 'px');
+                star.style.setProperty('--y', y + 'px');
+                star.style.left = '50%';
+                star.style.top = '50%';
+                star.style.fontSize = (Math.random() * 20 + 25) + 'px';
+                star.style.filter = 'drop-shadow(0 0 5px rgba(255,255,255,0.8))';
+                
+                imageContainer.appendChild(star);
+                
+                setTimeout(() => star.remove(), 1500);
+            }
+
+            // 添加光环效果
+            const ring = document.createElement('div');
+            ring.style.cssText = `
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 200px;
+                height: 200px;
+                border: 3px solid rgba(255,255,255,0.8);
+                border-radius: 50%;
+                transform: translate(-50%, -50%) scale(0);
+                animation: ringExpand 1s ease-out forwards;
+                pointer-events: none;
+            `;
+            
+            imageContainer.appendChild(ring);
+            setTimeout(() => ring.remove(), 1000);
+
+            // 添加样式
+            if (!document.getElementById('ring-style')) {
+                const ringStyle = document.createElement('style');
+                ringStyle.id = 'ring-style';
+                ringStyle.textContent = `
+                    @keyframes ringExpand {
+                        0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+                        100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(ringStyle);
+            }
+        }
+
+        // 处理优惠券按钮点击
+        function handleCouponClick() {
+            clickCount++;
+            const button = document.getElementById('couponButton');
+            
+            if (clickCount === 1) {
+                // 第一次点击，按钮移动
+                button.classList.add('moved');
+                showNotification('😄 抓到你了！再点一次~');
+                
+                // 随机移动按钮位置
+                const container = document.querySelector('.container');
+                const maxX = Math.min(window.innerWidth - 300, 200);
+                const maxY = Math.min(window.innerHeight - 200, 100);
+                
+                button.style.position = 'absolute';
+                button.style.left = Math.random() * maxX + 'px';
+                button.style.top = Math.random() * maxY + 'px';
+                
+                setTimeout(() => button.classList.remove('moved'), 500);
+            } else {
+                // 第二次点击，跳转到京东
+                showNotification('🎉 正在跳转到京东领取优惠券...');
+                setTimeout(() => {
+                    window.location.href = 'https://re.m.jd.com/page/homelike?ad_od=3&re_dcp=21Sm2D2ZOw&traffic_source=1004&bd_vid=4192c87ad809627a&cu=true&utm_source=haosou-search&utm_medium=cpc&utm_campaign=t_262767352_haosousearch&utm_term=64159740629_0_b6809de3523148548873a9e3350fd7d0';
+                }, 1000);
+            }
+        }
+
+        // 切换彩虹模式
+        function toggleRainbowMode() {
+            isRainbowMode = !isRainbowMode;
+            document.body.classList.toggle('rainbow-mode');
+            
+            if (isRainbowMode) {
+                showNotification('🌈 彩虹模式开启！整个页面都在变色~');
+            } else {
+                showNotification('彩虹模式关闭');
+            }
+        }
+
+        // 切换全屏模式
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                showNotification('🖥️ 全屏模式已开启');
+            } else {
+                document.exitFullscreen();
+                showNotification('已退出全屏');
+            }
+        }
+
+        // 切换音乐播放
+        function toggleMusic() {
+            const music = document.getElementById('backgroundMusic');
+            if (isMusicPlaying) {
+                music.pause();
+                showNotification('🔇 音乐已暂停');
+            } else {
+                music.play();
+                showNotification('🎵 音乐播放中');
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // 通知系统
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+                background: rgba(0,0,0,0.8); color: white; padding: 15px 25px;
+                border-radius: 25px; z-index: 1000; font-size: 16px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // 创建浮动星星背景
+        function createFloatingStars() {
+            const container = document.getElementById('floatingStars');
+            const stars = ['⭐', '✨', '💫', '🌟', '🦄', '🌈'];
+            
+            for (let i = 0; i < 15; i++) {
+                const star = document.createElement('div');
+                star.textContent = stars[Math.floor(Math.random() * stars.length)];
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.animationDelay = Math.random() * 6 + 's';
+                star.style.fontSize = Math.random() * 20 + 15 + 'px';
+                
+                container.appendChild(star);
+                
+                setTimeout(() => star.remove(), 6000);
+            }
+        }
+
+        // 每2秒创建新的浮动星星
+        setInterval(createFloatingStars, 2000);
+
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translate(-50%, -100%); opacity: 0; }
+                to { transform: translate(-50%, 0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translate(-50%, 0); opacity: 1; }
+                to { transform: translate(-50%, -100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 页面点击事件（用于音乐播放）
+        document.addEventListener('click', function() {
+            if (!isMusicPlaying) {
+                const music = document.getElementById('backgroundMusic');
+                music.play().then(() => {
+                    isMusicPlaying = true;
+                }).catch(() => {});
+            }
+        });
+
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            switch(e.key) {
+                case 'r':
+                case 'R':
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        toggleRainbowMode();
+                    }
+                    break;
+                case 'f':
+                case 'F':
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        toggleFullscreen();
+                    }
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    toggleMusic();
+                    break;
+            }
+        });
+
+        // 初始化
+        createFloatingStars();
+        showNotification('🎉 欢迎来到梦幻卡通星球！点击独角兽发射星星✨');
+    </script>
+</body>
+</html>
